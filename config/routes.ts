@@ -52,13 +52,18 @@ export default [
     component: './TableList',
   },
   {
-    layout: false,
     path: '/play',
+    name: 'play',
     routes: [
       {
-        name: 'play',
+        // name: 'play.play01', // without a name, won't display in menu
         path: '/play/play01',
         component: './Play/Play01',
+      },
+      {
+        name: 'play.play02',
+        path: '/play/play02',
+        component: './Play/Play02',
       },
       {
         path: '*',
