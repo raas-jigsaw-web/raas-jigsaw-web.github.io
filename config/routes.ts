@@ -52,6 +52,21 @@ export default [
     component: './TableList',
   },
   {
+    layout: false,
+    path: '/play',
+    routes: [
+      {
+        name: 'play',
+        path: '/play/play01',
+        component: './Play/Play01',
+      },
+      {
+        path: '*',
+        redirect: '/play/play01',
+      },
+    ]
+  },
+  {
     path: '/',
     redirect: '/welcome',
   },
