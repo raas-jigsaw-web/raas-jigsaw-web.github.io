@@ -1,0 +1,3 @@
+# Jigsaw
+
+yarn && yarn start
