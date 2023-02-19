@@ -28,35 +28,35 @@ export default [
     icon: 'smile',
     component: './Welcome',
   },
-  {
-    path: '/admin',
-    name: 'admin',
-    icon: 'crown',
-    access: 'canAdmin',
-    routes: [
-      {
-        path: '/admin',
-        redirect: '/admin/sub-page',
-      },
-      {
-        path: '/admin/sub-page',
-        name: 'sub-page',
-        component: './Admin',
-      },
-    ],
-  },
-  {
-    name: 'list.table-list',
-    icon: 'table',
-    path: '/list',
-    component: './TableList',
-  },
+  // {
+  //   path: '/admin',
+  //   name: 'admin',
+  //   icon: 'crown',
+  //   access: 'canAdmin',
+  //   routes: [
+  //     {
+  //       path: '/admin',
+  //       redirect: '/admin/sub-page',
+  //     },
+  //     {
+  //       path: '/admin/sub-page',
+  //       name: 'sub-page',
+  //       component: './Admin',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'list.table-list',
+  //   icon: 'table',
+  //   path: '/list',
+  //   component: './TableList',
+  // },
   {
     path: '/play',
     name: 'play',
     routes: [
       {
-        // name: 'play.play01', // without a name, won't display in menu
+        name: 'play.play01', // without a name, won't display in menu
         path: '/play/play01',
         component: './Play/Play01',
       },
@@ -70,6 +70,12 @@ export default [
         redirect: '/play/play01',
       },
     ]
+  },
+  {
+    path: '/play01',
+    name: 'play',
+    layout: false,
+    component: './Play/Play01',
   },
   {
     path: '/',
