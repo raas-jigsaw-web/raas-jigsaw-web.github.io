@@ -1,0 +1,210 @@
+import React, {CSSProperties, PureComponent} from 'react'
+import StyledDiv from './StyledDiv'
+import {MatrixUtil} from "@/pages/Play/Play04/Block/matrixUtil";
+
+const zoomableMap = {
+  'n': 't',
+  's': 'b',
+  'e': 'r',
+  'w': 'l',
+  'ne': 'tr',
+  'nw': 'tl',
+  'se': 'br',
+  'sw': 'bl'
+}
+
+export class SquareProps {
+  key?: string
+  top?: number
+  left?: number
+  width?: number
+  height?: number
+  rotateAngle?: number
+  rotatable?: boolean
+  reversible?: boolean
+  movable?: boolean
+  matrix?: number[][]
+  boxSize?: number
+  boxBackgroundColor?: string
+  boxCursor?: string
+  extendedMatrix?: number[][]
+  onDrag?: () => void
+  onDragEnd?: () => void
+  onDragStart?: () => void
+  children?: any
+  backgroundColor?: string
+  border?: string
+  position?: string
+  cursor?: string
+  zIndex?: number
+  opacity?: number
+}
+
+export default class Square extends PureComponent <SquareProps, any> {
+
+  constructor(props: any, context: any) {
+    super(props, context);
+    this.state = {
+      ...props
+    }
+  }
+
+  setElementRef = (ref) => {
+    this.$element = ref
+  }
+
+  // Drag
+  startDrag = (e) => {
+    if (!this.props.movable) {
+      return
+    }
+    let {clientX: startX, clientY: startY} = e;
+    this.props.onDragStart && this.props.onDragStart()
+    this.mouseDown = true
+    const onMove = (e2) => {
+      if (!this.mouseDown) return // patch: fix windows press win key during mouseup issue
+      e2.stopImmediatePropagation()
+      const {clientX, clientY} = e2
+      const deltaX = clientX - startX
+      const deltaY = clientY - startY
+      this.props.onDrag && this.props.onDrag(deltaX, deltaY)
+
+      this.setState((state) => {
+        const top = state.top + deltaY;
+        const left = state.left + deltaX;
+        return {
+          ...state, top, left
+        }
+      })
+
+      startX = clientX
+      startY = clientY
+    }
+    const onUp = () => {
+      document.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseup', onUp)
+      if (!this.mouseDown) return
+      this.mouseDown = false
+      this.props.onDragEnd && this.props.onDragEnd()
+    }
+    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mouseup', onUp)
+  }
+
+  onRotate = () => {
+    console.log("onRotate")
+    const matrix = MatrixUtil.rotate(this.state.matrix);
+    this.setState(state => {
+      return {
+        ...state, matrix
+      }
+    })
+  }
+
+  onReverse = () => {
+    console.log("onReverse")
+    const matrix = MatrixUtil.reverse(this.state.matrix);
+    this.setState(state => {
+      console.log(matrix)
+      return {
+        ...state, matrix
+      }
+    })
+  }
+
+  render() {
+    const {
+      key,
+      border,
+      cursor,
+      boxSize,
+      boxCursor,
+      boxBackgroundColor,
+      position,
+      zIndex,
+      opacity,
+      backgroundColor
+    } = this.props
+    const {top, left, width, height, rotateAngle, matrix} = this.state
+    const columns = matrix[0].length, rows = matrix.length;
+
+    const boxes: SquareProps[] = [];
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        const box = new SquareProps()
+        box.key = `${key}-${i}-${j}`
+        box.top = boxSize * i;
+        box.left = boxSize * j
+        box.width = boxSize
+        box.height = boxSize
+        box.backgroundColor = this.state.matrix[i][j] ? boxBackgroundColor : undefined
+        box.cursor = boxCursor
+        box.zIndex = zIndex + 1
+        boxes.push(box)
+      }
+    }
+    const style: CSSProperties = {
+      top, left, width, height,
+      transform: `rotate(${rotateAngle}deg)`,
+      cursor,
+      userSelect: "none",
+      border,
+      backgroundColor,
+      position: !position ? "absolute" : position,
+      zIndex,
+      opacity
+    }
+    return (
+      <StyledDiv
+        ref={this.setElementRef}
+        onMouseDown={this.startDrag}
+        style={style}
+      >
+        {
+          this.props.children
+        }
+
+        {
+          // matrix view
+          boxes && boxes.map(box => {
+            console.log(box)
+            const boxStyle: CSSProperties = {
+              top: box.top, left: box.left, width: box.width, height: box.height,
+              cursor: box.cursor,
+              userSelect: "none",
+              // border,
+              backgroundColor: box.backgroundColor,
+              position: "absolute",
+              zIndex: box.zIndex,
+              opacity: box.opacity
+            }
+            return (
+              <StyledDiv key={box.key} style={boxStyle}
+              ></StyledDiv>
+            )
+          })
+        }
+
+        {
+          // 旋转, rotate
+          this.props.rotatable &&
+          <div className="rotate" onClick={this.onRotate}>
+            <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg">
+              <image width="14" height="14" href="/icons/cycle-arrow.png"/>
+            </svg>
+          </div>
+        }
+
+        {
+          // 翻转, reverse/flip
+          this.props.reversible &&
+          <div className="reverse" onClick={this.onReverse}>
+            <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg">
+              <image width="14" height="14" href="/icons/left-right-arrow.png"/>
+            </svg>
+          </div>
+        }
+      </StyledDiv>
+    )
+  }
+}

@@ -12,23 +12,6 @@
  */
 export default [
   {
-    path: '/user',
-    layout: false,
-    routes: [
-      {
-        name: 'login',
-        path: '/user/login',
-        component: './User/Login',
-      },
-    ],
-  },
-  {
-    path: '/welcome',
-    name: 'welcome',
-    icon: 'smile',
-    component: './Welcome',
-  },
-  {
     path: '/play',
     name: 'play',
     routes: [
@@ -48,6 +31,16 @@ export default [
         component: './Play/Play03',
       },
       {
+        name: 'play.play04',
+        path: '/play/play04',
+        component: './Play/Play04',
+      },
+      {
+        name: 'play.play05',
+        path: '/play/play05',
+        component: './Play/Play05',
+      },
+      {
         path: '*',
         redirect: '/play/play01',
       },
@@ -61,7 +54,7 @@ export default [
   },
   {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/play/play01',
   },
   {
     path: '*',
