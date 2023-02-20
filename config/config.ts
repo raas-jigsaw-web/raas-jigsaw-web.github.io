@@ -5,7 +5,7 @@ import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import routes from './routes';
 
-const { REACT_APP_ENV = 'dev' } = process.env;
+const { REACT_APP_ENV = 'test' } = process.env;
 
 export default defineConfig({
   /**
@@ -95,7 +95,6 @@ export default defineConfig({
    * @doc https://umijs.org/docs/max/i18n
    */
   locale: {
-    // default zh-CN
     default: 'en-US',
     antd: true,
     // default true, when it is true, will use `navigator.language` overwrite default
@@ -125,7 +124,7 @@ export default defineConfig({
    */
   headScripts: [
     // 解决首次加载时白屏的问题
-    { src: '/scripts/loading.js', async: true },
+    { src: 'scripts/loading.js', async: false },
   ],
   //================ pro 插件配置 =================
   presets: ['umi-presets-pro'],
@@ -152,4 +151,8 @@ export default defineConfig({
     strategy: 'normal',
   },
   requestRecord: {},
+  // base: REACT_APP_ENV === 'dev' ? '/' : '/raas/jigsaw-web/',
+  // publicPath: REACT_APP_ENV === 'dev' ? '/' : '/raas/jigsaw-web/',
+  // https://v4-pro.ant.design/docs/deploy
+  history: { type: 'hash' },
 });
