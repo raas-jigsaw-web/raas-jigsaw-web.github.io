@@ -42,7 +42,7 @@ export default class PlayPage extends React.Component {
     }
 
     return (<div>
-      <div className={"center"}>Here is play02..</div>
+      <div className={"center"}>Here is play03..</div>
 
       {
         <div style={{zIndex: 9999}}>
