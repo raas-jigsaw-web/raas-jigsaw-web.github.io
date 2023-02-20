@@ -1,6 +1,5 @@
 import React from 'react';
 import Piece from './Piece';
-import {Transformer} from "@jest/transform";
 import {FormattedMessage} from "@@/exports";
 
 export class Box {
@@ -46,20 +45,27 @@ export default class PlayPage extends React.Component {
       <div className={"center"}>Here is play02..</div>
 
       {
-        boxes.map(boxes2 => {
-          return boxes2.map(box => {
-            return (
-              <div style={{backgroundColor: "black"}}>
-                <Piece top={box.top} left={box.left} key={"box-" + box.top + "-" + box.left}>
-                  <FormattedMessage id={box.text}></FormattedMessage>
-                </Piece>
-              </div>
-            )
-          })
-        })
+        <div style={{zIndex: 9999}}>
+          {
+            boxes.map(boxes2 => {
+              return boxes2.map(box => {
+                return (
+                  <div style={{backgroundColor: "black"}}>
+                    <Piece top={box.top} left={box.left} kept={box.text === "kept"}
+                           key={"box-" + box.top + "-" + box.left}>
+                      <FormattedMessage id={box.text}></FormattedMessage>
+                    </Piece>
+                  </div>
+                )
+              })
+            })
+          }
+        </div>
       }
       {
-        <Piece top={0 + 1} left={0 + 1} width={size * columns} height={size * rows}></Piece>
+        <div style={{zIndex: -9999}}>
+          <Piece top={0 + 1} left={0 + 1} width={size * columns} height={size * rows} movable={false}></Piece>
+        </div>
       }
     </div>)
   }
