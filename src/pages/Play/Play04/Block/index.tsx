@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react'
 import Rect from './Rect'
-import {MatrixUtil} from "@/pages/Play/Play04/Block/matrixUtil";
+import {MatrixUtil} from "./matrixUtil";
 
 export class Box {
   top: number
@@ -32,7 +32,6 @@ export default class Block extends PureComponent<any, any> {
   }
 
   onRotate = () => {
-    console.log("onRotate")
     const matrix = MatrixUtil.rotate(this.state.matrix);
     this.setState(state => {
       return {
@@ -42,10 +41,8 @@ export default class Block extends PureComponent<any, any> {
   }
 
   onReverse = () => {
-    console.log("onReverse")
     const matrix = MatrixUtil.reverse(this.state.matrix);
     this.setState(state => {
-      console.log(matrix)
       return {
         ...state, matrix
       }
