@@ -36,6 +36,8 @@ export default {
   'saturday': 'Saturday',
   'sunday': 'Sunday',
   'kept': 'Kept',
+  'resolve': 'Resolve it',
+  'develop.wait': 'In development, please wait ..',
   ...globalHeader,
   ...menu,
   ...settingDrawer,

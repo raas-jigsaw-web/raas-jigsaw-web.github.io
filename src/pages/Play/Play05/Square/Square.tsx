@@ -1,6 +1,7 @@
 import React, {CSSProperties, PureComponent} from 'react'
 import StyledDiv from './StyledDiv'
-import {MatrixUtil} from "@/pages/Play/Play04/Block/matrixUtil";
+import {MatrixUtil} from "../util/matrixUtil";
+import {FormattedMessage} from "@@/exports";
 
 const zoomableMap = {
   'n': 't',
@@ -36,6 +37,7 @@ export class SquareProps {
   border?: string
   position?: string
   cursor?: string
+  text?: string
   zIndex?: number
   opacity?: number
 }
@@ -105,7 +107,6 @@ export default class Square extends PureComponent <SquareProps, any> {
     console.log("onReverse")
     const matrix = MatrixUtil.reverse(this.state.matrix);
     this.setState(state => {
-      console.log(matrix)
       return {
         ...state, matrix
       }
@@ -123,24 +124,27 @@ export default class Square extends PureComponent <SquareProps, any> {
       position,
       zIndex,
       opacity,
-      backgroundColor
+      backgroundColor,
+      text,
     } = this.props
     const {top, left, width, height, rotateAngle, matrix} = this.state
-    const columns = matrix[0].length, rows = matrix.length;
 
     const boxes: SquareProps[] = [];
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < columns; j++) {
-        const box = new SquareProps()
-        box.key = `${key}-${i}-${j}`
-        box.top = boxSize * i;
-        box.left = boxSize * j
-        box.width = boxSize
-        box.height = boxSize
-        box.backgroundColor = this.state.matrix[i][j] ? boxBackgroundColor : undefined
-        box.cursor = boxCursor
-        box.zIndex = zIndex + 1
-        boxes.push(box)
+    if (matrix && matrix.length && matrix[0]) {
+      const columns = matrix[0].length, rows = matrix.length;
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < columns; j++) {
+          const box = new SquareProps()
+          box.key = `${key}-${i}-${j}`
+          box.top = boxSize * i;
+          box.left = boxSize * j
+          box.width = boxSize
+          box.height = boxSize
+          box.backgroundColor = this.state.matrix[i][j] ? boxBackgroundColor : undefined
+          box.cursor = boxCursor
+          box.zIndex = zIndex + 1
+          boxes.push(box)
+        }
       }
     }
     const style: CSSProperties = {
@@ -165,9 +169,15 @@ export default class Square extends PureComponent <SquareProps, any> {
         }
 
         {
+          text &&
+          <div style={{fontSize: "1.1em", lineHeight: "1em", margin: "0.6em 0.3em 0"}}>
+            <FormattedMessage id={text} key={`backboard-text-${text}`}></FormattedMessage>
+          </div>
+        }
+
+        {
           // matrix view
           boxes && boxes.map(box => {
-            console.log(box)
             const boxStyle: CSSProperties = {
               top: box.top, left: box.left, width: box.width, height: box.height,
               cursor: box.cursor,

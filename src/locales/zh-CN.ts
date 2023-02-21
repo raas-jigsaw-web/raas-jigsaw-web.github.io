@@ -36,6 +36,8 @@ export default {
   'saturday': '星期六',
   'sunday': '星期天',
   'kept': '空白',
+  'resolve': '查询解法',
+  'develop.wait': '正在开发 ..',
   ...pages,
   ...globalHeader,
   ...menu,
