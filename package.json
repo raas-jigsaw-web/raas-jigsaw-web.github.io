@@ -6,7 +6,7 @@
   "scripts": {
     "analyze": "cross-env ANALYZE=1 max build",
     "build": "max build",
-    "deploy": "npm run build && move dist docs",
+    "deploy": "rm -rf docs dist && npm run build && move dist docs",
     "dev": "npm run start:dev",
     "i18n-remove": "pro i18n-remove --locale=zh-CN --write",
     "postinstall": "max setup",
