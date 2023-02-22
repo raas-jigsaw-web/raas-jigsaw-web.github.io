@@ -3,6 +3,7 @@ import Square, {SquareProps} from './Square/Square';
 import {Backboard, Days, Months, Pieces, Texts, Weeks} from "./Block/Block";
 import {Button, Col, DatePicker, List, message, Row} from 'antd';
 import {formatMessage, FormattedMessage, SelectLang} from "@umijs/max";
+import {history} from "@@/exports";
 
 export default class PlayPage extends React.Component<any, any> {
 
@@ -72,9 +73,16 @@ export default class PlayPage extends React.Component<any, any> {
   }
 
   render() {
-    return (<div>
-      <div className={"center"}>Here is play 06..</div>
+    return (<div style={{padding: "4em 4em 0"}}>
+      <div className={"center"}>Here is play 08.. - <Button type={"primary"} onClick={() => {
+        history.push('/welcome');
+      }}>Test route /welcome </Button><Button type={"primary"} onClick={() => {
+        history.push('/play/play08');
+      }}>Back to 08</Button>
+      </div>
+
       <Row>
+        <Col span={2}></Col>
         {
           <Col span={12}>
             {
@@ -82,7 +90,15 @@ export default class PlayPage extends React.Component<any, any> {
               this.state.backboard.map(b => {
                 return (<Square top={b.top} left={b.left} width={b.width} height={b.height} zIndex={b.zIndex}
                                 border={b.border} text={b.text} backgroundColor={b.backgroundColor}
-                                rotatable={false} reversible={false}></Square>)
+                                rotatable={false} reversible={false}>
+                  {
+                    (b.text === "may" || b.text === "01") &&
+                    <div style={{fontSize: "0.8em"}}>
+                      {`top: ${b.top}`} <br/>
+                      {`left: ${b.left}`} <br/>
+                    </div>
+                  }
+                </Square>)
               })
             }
           </Col>
@@ -102,7 +118,6 @@ export default class PlayPage extends React.Component<any, any> {
                             height={Backboard.BoxSize / 3 * piece.matrix.length}
                             position={"relative"} zIndex={-1}
                             rotatable={false} reversible={false} movable={false}>
-
                     </Square>
                     <Square key={`piece-pickup-${piece.name}`} pieceName={piece.name}
                             top={Backboard.BoxSize / 3} left={Backboard.BoxSize / 3}
@@ -129,11 +144,9 @@ export default class PlayPage extends React.Component<any, any> {
             </Row>
           </Col>
         }
-        {
-          <Col span={1} offset={1}>
-            <SelectLang className={"ant-dropdown-trigger css-lye32u"} reload={false}/>
-          </Col>
-        }
+        <Col span={1} offset={1}>
+          <SelectLang className={"ant-dropdown-trigger css-lye32u"} reload={false}/>
+        </Col>
       </Row>
     </div>)
   }

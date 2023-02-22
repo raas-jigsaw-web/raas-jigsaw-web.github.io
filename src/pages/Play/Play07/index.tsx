@@ -73,7 +73,7 @@ export default class PlayPage extends React.Component<any, any> {
 
   render() {
     return (<div>
-      <div className={"center"}>Here is play 05..</div>
+      <div className={"center"}>Here is play 07..</div>
       <Row>
         {
           <Col span={12}>
