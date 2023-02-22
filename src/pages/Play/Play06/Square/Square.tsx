@@ -4,17 +4,6 @@ import {MatrixUtil} from "../util/matrixUtil";
 import {FormattedMessage} from "@@/exports";
 import {Backboard} from "../Block/Block";
 
-const zoomableMap = {
-  'n': 't',
-  's': 'b',
-  'e': 'r',
-  'w': 'l',
-  'ne': 'tr',
-  'nw': 'tl',
-  'se': 'br',
-  'sw': 'bl'
-}
-
 export class SquareProps {
   key?: string
   pieceName?: string
@@ -37,7 +26,7 @@ export class SquareProps {
   children?: any
   backgroundColor?: string
   border?: string
-  position?: string
+  position?: "absolute" | "relative"
   cursor?: string
   text?: string
   zIndex?: number
@@ -53,13 +42,9 @@ export default class Square extends PureComponent <SquareProps, any> {
     }
   }
 
-  setElementRef = (ref) => {
-    this.$element = ref
-  }
-
   // Drag
   startDrag = (e) => {
-    if (!this.props.movable) {
+    if (!this.props.movable ) {
       return
     }
     let {clientX: startX, clientY: startY} = e;
@@ -71,12 +56,35 @@ export default class Square extends PureComponent <SquareProps, any> {
       const {clientX, clientY} = e2
       const deltaX = clientX - startX
       const deltaY = clientY - startY
+      startX = clientX
+      startY = clientY
+    }
+    const onUp = () => {
+      document.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseup', onUp)
+      if (!this.mouseDown) return
+      this.mouseDown = false
+      this.props.onDragEnd && this.props.onDragEnd()
+    }
+    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mouseup', onUp)
+  }
+  startInnerDrag = (e, aaa) => {
+    console.log(e, aaa)
+    let {clientX: startX, clientY: startY} = e;
+    this.mouseDown = true
+    const onMove = (e2) => {
+      if (!this.mouseDown) return // patch: fix windows press win key during mouseup issue
+      e2.stopImmediatePropagation()
+      const {clientX, clientY} = e2
+      const deltaX = clientX - startX
+      const deltaY = clientY - startY
       this.props.onDrag && this.props.onDrag(deltaX, deltaY)
 
       this.setState((state) => {
         const boxSize = Backboard.BoxSize;
-        const width = boxSize * this.props.matrix?.length;
-        const height = width;
+        const width = 0;
+        const height = 0;
         const top = state.top + deltaY;
         const left = state.left + deltaX;
         return {
@@ -140,11 +148,22 @@ export default class Square extends PureComponent <SquareProps, any> {
           box.key = `${key}-${i}-${j}`
           box.top = boxSize * i;
           box.left = boxSize * j
-          box.width = boxSize
-          box.height = boxSize
-          box.backgroundColor = this.state.matrix[i][j] ? boxBackgroundColor : undefined
-          box.cursor = boxCursor
-          box.zIndex = zIndex + 1
+          const flag = this.state.matrix[i][j];
+          if (flag) {
+            box.backgroundColor = boxBackgroundColor;
+            box.cursor = boxCursor;
+            box.zIndex = zIndex + 1
+            box.onDrag = this.startInnerDrag
+            box.width = boxSize
+            box.height = boxSize
+          } else {
+            box.backgroundColor = undefined;
+            box.cursor = undefined;
+            box.zIndex = zIndex - 1
+            box.onDrag = this.startDrag
+            box.width = 0
+            box.height = 0
+          }
           boxes.push(box)
         }
       }
@@ -162,7 +181,6 @@ export default class Square extends PureComponent <SquareProps, any> {
     }
     return (
       <StyledDiv
-        ref={this.setElementRef}
         onMouseDown={this.startDrag}
         style={style}
       >
@@ -191,7 +209,8 @@ export default class Square extends PureComponent <SquareProps, any> {
               opacity: box.opacity
             }
             return (
-              <StyledDiv key={box.key} style={boxStyle}
+              <StyledDiv onMouseDown={box.onDrag}
+                         key={box.key} style={boxStyle}
               ></StyledDiv>
             )
           })

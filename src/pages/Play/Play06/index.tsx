@@ -106,12 +106,12 @@ export default class PlayPage extends React.Component<any, any> {
                     </Square>
                     <Square key={`piece-pickup-${piece.name}`} pieceName={piece.name}
                             top={Backboard.BoxSize / 3} left={Backboard.BoxSize / 3}
-                            width={Backboard.BoxSize / 3 * piece.matrix.length}
-                            height={Backboard.BoxSize / 3 * piece.matrix.length}
+                            width={0}
+                            height={0}
                             matrix={piece.matrix} boxBackgroundColor={piece.color} zIndex={10}
                             boxSize={Backboard.BoxSize / 3} position={"absolute"} boxCursor={"pointer"}
                             opacity={0.92}
-                            rotatable={false} reversible={false} movable={true}>
+                            rotatable={false} reversible={false} movable={false}>
                     </Square>
                   </List.Item>
                 )}
