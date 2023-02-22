@@ -46,6 +46,11 @@ export default [
         component: './Play/Play06',
       },
       {
+        name: 'play.play07',
+        path: '/play/play07',
+        component: './Play/Play07',
+      },
+      {
         path: '*',
         redirect: '/play/play01',
       },

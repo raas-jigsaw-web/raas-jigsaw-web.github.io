@@ -44,11 +44,10 @@ export default class Square extends PureComponent <SquareProps, any> {
 
   // Drag
   startDrag = (e) => {
-    if (!this.props.movable ) {
+    if (!this.props.movable) {
       return
     }
     let {clientX: startX, clientY: startY} = e;
-    this.props.onDragStart && this.props.onDragStart()
     this.mouseDown = true
     const onMove = (e2) => {
       if (!this.mouseDown) return // patch: fix windows press win key during mouseup issue
@@ -64,7 +63,6 @@ export default class Square extends PureComponent <SquareProps, any> {
       document.removeEventListener('mouseup', onUp)
       if (!this.mouseDown) return
       this.mouseDown = false
-      this.props.onDragEnd && this.props.onDragEnd()
     }
     document.addEventListener('mousemove', onMove)
     document.addEventListener('mouseup', onUp)
@@ -78,8 +76,8 @@ export default class Square extends PureComponent <SquareProps, any> {
       const {clientX, clientY} = e2
       const deltaX = clientX - startX
       const deltaY = clientY - startY
-      this.props.onDrag && this.props.onDrag(deltaX, deltaY)
 
+      const rotatable = true, reversible = true
       this.setState((state) => {
         const boxSize = Backboard.BoxSize;
         const width = 0;
@@ -87,7 +85,7 @@ export default class Square extends PureComponent <SquareProps, any> {
         const top = state.top + deltaY;
         const left = state.left + deltaX;
         return {
-          ...state, top, left, width, height, boxSize,
+          ...state, top, left, width, height, boxSize, rotatable, reversible,
         }
       })
 
@@ -99,7 +97,6 @@ export default class Square extends PureComponent <SquareProps, any> {
       document.removeEventListener('mouseup', onUp)
       if (!this.mouseDown) return
       this.mouseDown = false
-      this.props.onDragEnd && this.props.onDragEnd()
     }
     document.addEventListener('mousemove', onMove)
     document.addEventListener('mouseup', onUp)
@@ -136,7 +133,7 @@ export default class Square extends PureComponent <SquareProps, any> {
       backgroundColor,
       text,
     } = this.props
-    const {top, left, width, height, boxSize, rotateAngle, matrix} = this.state
+    const {top, left, width, height, boxSize, rotateAngle, matrix, rotatable, reversible,} = this.state
 
     const boxes: SquareProps[] = [];
     if (matrix && matrix.length && matrix[0]) {
@@ -210,14 +207,26 @@ export default class Square extends PureComponent <SquareProps, any> {
             return (
               <StyledDiv onMouseDown={box.onDrag}
                          key={box.key} style={boxStyle}
-              ></StyledDiv>
-            )
+              >
+                {
+                  (box.top === top && box.left === left || true) &&
+                  (
+                    <div style={{fontSize: "0.8em"}}>
+                      {`top: ${top}`} <br/>
+                      {`left: ${left}`} <br/>
+                      {`b.top: ${box.top}`} <br/>
+                      {`b.left: ${box.left}`} <br/>
+                    </div>
+                  )
+                }
+              </StyledDiv>
+            );
           })
         }
 
         {
           // 旋转, rotate
-          this.props.rotatable &&
+          rotatable &&
           <div className="rotate" onClick={this.onRotate}>
             <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg">
               <image width="14" height="14" href="/icons/cycle-arrow.png"/>
@@ -227,7 +236,7 @@ export default class Square extends PureComponent <SquareProps, any> {
 
         {
           // 翻转, reverse/flip
-          this.props.reversible &&
+          reversible &&
           <div className="reverse" onClick={this.onReverse}>
             <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg">
               <image width="14" height="14" href="/icons/left-right-arrow.png"/>

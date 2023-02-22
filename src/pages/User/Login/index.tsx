@@ -129,7 +129,6 @@ const Login: React.FC = () => {
         history.push(urlParams.get('redirect') || '/');
         return;
       }
-      console.log(msg);
       // 如果失败去设置用户错误信息
       setUserLoginState(msg);
     } catch (error) {
@@ -137,7 +136,6 @@ const Login: React.FC = () => {
         id: 'pages.login.failure',
         defaultMessage: '登录失败，请重试！',
       });
-      console.log(error);
       message.error(defaultLoginFailureMessage);
     }
   };
