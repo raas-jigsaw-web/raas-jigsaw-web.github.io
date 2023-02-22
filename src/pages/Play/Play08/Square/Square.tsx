@@ -35,8 +35,6 @@ export class SquareProps {
 
 export default class Square extends PureComponent <SquareProps, any> {
 
-  mouseDown?: boolean
-
   constructor(props: any, context: any) {
     super(props, context);
     this.state = {
@@ -63,12 +61,13 @@ export default class Square extends PureComponent <SquareProps, any> {
     const onUp = () => {
       document.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseup', onUp)
-      this.mouseDown && (this.mouseDown = false)
+      if (!this.mouseDown) return
+      this.mouseDown = false
     }
     document.addEventListener('mousemove', onMove)
     document.addEventListener('mouseup', onUp)
   }
-  startInnerDrag = (e) => {
+  startInnerDrag = (e, aaa) => {
     let {clientX: startX, clientY: startY} = e;
     this.mouseDown = true
     const onMove = (e2) => {
@@ -78,6 +77,7 @@ export default class Square extends PureComponent <SquareProps, any> {
       const deltaX = clientX - startX
       const deltaY = clientY - startY
 
+      const rotatable = true, reversible = true
       this.setState((state) => {
         const boxSize = Backboard.BoxSize;
         const width = 0;
@@ -85,7 +85,7 @@ export default class Square extends PureComponent <SquareProps, any> {
         const top = state.top + deltaY;
         const left = state.left + deltaX;
         return {
-          ...state, top, left, width, height, boxSize,
+          ...state, top, left, width, height, boxSize, rotatable, reversible,
         }
       })
 
@@ -95,14 +95,8 @@ export default class Square extends PureComponent <SquareProps, any> {
     const onUp = () => {
       document.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseup', onUp)
-      this.mouseDown && (this.mouseDown = false)
-
-      this.setState((state) => {
-        return {
-          ...state, rotatable: true, reversible: true,
-        }
-      }, () => {
-      })
+      if (!this.mouseDown) return
+      this.mouseDown = false
     }
     document.addEventListener('mousemove', onMove)
     document.addEventListener('mouseup', onUp)
@@ -124,10 +118,6 @@ export default class Square extends PureComponent <SquareProps, any> {
         ...state, matrix
       }
     })
-  }
-
-  onBlur = () => {
-    console.log("haha")
   }
 
   render() {
@@ -216,10 +206,10 @@ export default class Square extends PureComponent <SquareProps, any> {
             }
             return (
               <StyledDiv onMouseDown={box.onDrag}
-                         onBlur={this.onBlur}
-                         key={box.key} style={boxStyle}>
+                         key={box.key} style={boxStyle}
+              >
                 {
-                  (box.top === 0 && box.left === 0 && rotatable) &&
+                  (box.top === top && box.left === left || true) &&
                   (
                     <div style={{fontSize: "0.8em"}}>
                       {`top: ${top}`} <br/>

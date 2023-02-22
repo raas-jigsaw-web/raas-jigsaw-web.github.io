@@ -44,7 +44,7 @@ export default class Square extends PureComponent <SquareProps, any> {
 
   // Drag
   startDrag = (e) => {
-    if (!this.props.movable ) {
+    if (!this.props.movable) {
       return
     }
     let {clientX: startX, clientY: startY} = e;
@@ -82,8 +82,8 @@ export default class Square extends PureComponent <SquareProps, any> {
 
       this.setState((state) => {
         const boxSize = Backboard.BoxSize;
-        const width = 0;
-        const height = 0;
+        const width = boxSize;
+        const height = boxSize;
         const top = state.top + deltaY;
         const left = state.left + deltaX;
         return {
@@ -147,21 +147,20 @@ export default class Square extends PureComponent <SquareProps, any> {
           box.key = `${key}-${i}-${j}`
           box.top = boxSize * i;
           box.left = boxSize * j
+          box.width = boxSize
+          box.height = boxSize
+          box.onDrag = this.startInnerDrag
           const flag = this.state.matrix[i][j];
           if (flag) {
             box.backgroundColor = boxBackgroundColor;
             box.cursor = boxCursor;
             box.zIndex = zIndex + 1
-            box.onDrag = this.startInnerDrag
             box.width = boxSize
             box.height = boxSize
           } else {
             box.backgroundColor = undefined;
             box.cursor = undefined;
             box.zIndex = zIndex - 1
-            box.onDrag = this.startDrag
-            box.width = 0
-            box.height = 0
           }
           boxes.push(box)
         }

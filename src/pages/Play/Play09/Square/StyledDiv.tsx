@@ -3,8 +3,6 @@ import styled from 'styled-components'
 export default styled.div`
   z-index: 20;
 
-  outline: 1px solid red;
-
   .square {
     position: relative;
     width: 7px;
@@ -16,11 +14,10 @@ export default styled.div`
 
   .rotate {
     position: absolute;
-    left: 50%;
-    top: -26px;
-    width: 18px;
-    height: 18px;
-    margin-left: -9px;
+    left: 0em;
+    top: -2em;
+    width: 1em;
+    height: 1em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,11 +26,10 @@ export default styled.div`
 
   .reverse {
     position: absolute;
-    left: 50%;
-    bottom: -26px;
-    width: 18px;
-    height: 18px;
-    margin-left: -9px;
+    left: 3em;
+    top: -2em;
+    width: 1em;
+    height: 1em;
     display: flex;
     justify-content: center;
     align-items: center;
