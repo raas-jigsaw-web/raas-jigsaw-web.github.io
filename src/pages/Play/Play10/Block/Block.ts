@@ -16,9 +16,9 @@ export const C = [
   [0, 0, 0,],
 ]
 export const D = [
+  [0, 0, 1,],
+  [0, 0, 1,],
   [1, 1, 1,],
-  [1, 0, 0,],
-  [1, 0, 0,],
 ]
 export const E = [
   [1, 1, 0,],
@@ -31,19 +31,19 @@ export const F = [
   [0, 1, 0,],
 ]
 export const G = [
-  [1, 0, 0, 0,],
-  [1, 0, 0, 0,],
-  [1, 0, 0, 0,],
-  [1, 0, 0, 0,],
+  [1, 1, 1, 1,],
+  [0, 0, 0, 0,],
+  [0, 0, 0, 0,],
+  [0, 0, 0, 0,],
 ]
 export const H = [
+  [0, 1, 0,],
+  [0, 1, 0,],
   [1, 1, 0,],
-  [0, 1, 0,],
-  [0, 1, 0,],
 ]
 export const I = [
-  [0, 0, 1, 1,],
-  [1, 1, 1, 0,],
+  [1, 1, 0, 0,],
+  [0, 1, 1, 1,],
   [0, 0, 0, 0,],
   [0, 0, 0, 0,],
 ]
@@ -93,6 +93,7 @@ export class Backboard {
   static backgroundColor = ["white", "#eee"];
   static backgroundColorHighLight = "#f1c309";
   static border = "1px solid rgb(25,140,250)";
+  static Id = "backboard-id";
 }
 
 export const Texts: string[][] = [

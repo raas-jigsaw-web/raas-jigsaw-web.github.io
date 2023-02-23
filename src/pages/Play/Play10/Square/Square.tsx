@@ -11,6 +11,12 @@ export class SquareProps {
   left?: number
   width?: number
   height?: number
+  x?: number
+  y?: number
+  maxX?: number
+  maxY?: number
+  minX?: number
+  minY?: number
   rotateAngle?: number
   rotatable?: boolean
   reversible?: boolean
@@ -71,13 +77,18 @@ export default class Square extends PureComponent <SquareProps, any> {
   startInnerDrag = (e) => {
     let {clientX: startX, clientY: startY} = e;
     this.mouseDown = true
+
+    const {maxX, maxY, minX, minY,} = this.props
+
     const onMove = (e2) => {
       if (!this.mouseDown) return // patch: fix windows press win key during mouseup issue
       e2.stopImmediatePropagation()
       const {clientX, clientY} = e2
-      const deltaX = clientX - startX
-      const deltaY = clientY - startY
+      let deltaX = clientX - startX
+      let deltaY = clientY - startY
 
+      const x = Math.round(e2.target?.parentElement?.getBoundingClientRect()?.x || 0)
+      const y = Math.round(e2.target?.parentElement?.getBoundingClientRect()?.y || 0)
       this.setState((state) => {
         const boxSize = Backboard.BoxSize;
         const width = 0;
@@ -85,9 +96,9 @@ export default class Square extends PureComponent <SquareProps, any> {
         const top = state.top + deltaY;
         const left = state.left + deltaX;
         return {
-          ...state, top, left, width, height, boxSize,
+          ...state, top, left, width, height, boxSize, x, y,
         }
-      })
+      });
 
       startX = clientX
       startY = clientY
@@ -98,10 +109,37 @@ export default class Square extends PureComponent <SquareProps, any> {
       this.mouseDown && (this.mouseDown = false)
 
       this.setState((state) => {
+        let top = state.top
+        let left = state.left
+        let x = state?.x
+        let y = state?.y
+
+        if (maxX && x >= maxX) {
+          left += (maxX - x)
+        }
+        if (minX && x <= minX) {
+          left += (minX - x)
+        }
+        if (maxY && y >= maxY) {
+          top += (maxY - y)
+        }
+        if (minY && y <= minY) {
+          top += (minY - y)
+        }
+
         return {
-          ...state, rotatable: true, reversible: true,
+          ...state, rotatable: true, reversible: true, top, left,
         }
       }, () => {
+
+        // alignment, todo
+        this.setState(state => {
+          console.log(state)
+          return {
+            ...state,
+          }
+        })
+
         const onDown = (e) => {
           if (e?.target?.attributes?.name?.value === "reverse" || e?.target?.attributes?.name?.value === "rotate") {
             return
@@ -152,7 +190,7 @@ export default class Square extends PureComponent <SquareProps, any> {
       backgroundColor,
       text,
     } = this.props
-    const {top, left, width, height, boxSize, rotateAngle, matrix, rotatable, reversible,} = this.state
+    const {top, left, width, height, x, y, boxSize, rotateAngle, matrix, rotatable, reversible,} = this.state
 
     const boxes: SquareProps[] = [];
     if (matrix && matrix.length && matrix[0]) {
@@ -224,16 +262,15 @@ export default class Square extends PureComponent <SquareProps, any> {
               opacity: box.opacity
             }
             return (
-              <StyledDiv onMouseDown={box.onDrag}
-                         key={box.key} style={boxStyle}>
+              <StyledDiv onMouseDown={box.onDrag} key={box.key} style={boxStyle}>
                 {
-                  (box.top === 0 && box.left === 0 && rotatable) &&
+                  (box.top === 0 && box.left === 0 && (rotatable || true)) && // todo, delete
                   (
                     <div style={{fontSize: "0.8em"}}>
                       {`top:${top}`} <br/>
                       {`left:${left}`} <br/>
-                      {`b.top:${box.top}`} <br/>
-                      {`b.left:${box.left}`} <br/>
+                      {`x:${x}`} <br/>
+                      {`y:${y}`} <br/>
                     </div>
                   )
                 }

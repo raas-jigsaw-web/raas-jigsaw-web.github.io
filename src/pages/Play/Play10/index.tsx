@@ -79,76 +79,99 @@ export default class PlayPage extends React.Component<any, any> {
       this.dateSet = true
       this.onDateChange(dayjs())
     }
+    const {minX, minY, maxX, maxY,} = this.state
     return (<div>
       <div className={"center"}>Here is play 10..</div>
 
-      <Row>
-        {
-          <Col span={11}>
-            {
-              // backboard
-              this.state.backboard.map(b => {
-                return (<Square top={b.top} left={b.left} width={b.width} height={b.height} zIndex={b.zIndex}
-                                border={b.border} text={b.text} backgroundColor={b.backgroundColor}
-                                rotatable={false} reversible={false}
-                                key={`backboard-${b.key}`}>
-                  {
-                    (b.text === "may" || b.text === "01") &&
-                    <div style={{fontSize: "0.8em"}} key={`backboard-test-${b.key}`}>
-                      {`top: ${b.top}`} <br/>
-                      {`left: ${b.left}`} <br/>
-                    </div>
-                  }
-                </Square>)
-              })
-            }
+      <div id={Backboard.Id} onLoad={() => {
+        this.setState(state => {
+          const rect = document.getElementById(Backboard.Id)?.getBoundingClientRect()
+          const backboardX = Math.round(rect?.x || 0), backboardY = Math.round(rect?.y || 0);
+          const minX = backboardX, minY = backboardY,
+            maxX = minX + Backboard.BoxSize * (Backboard.Columns + 5),
+            maxY = minY + Backboard.BoxSize * (Backboard.Rows - 1);
+
+          return {
+            ...state, minX, minY, maxX, maxY,
+          }
+        })
+      }}>
+        <Row>
+          {
+            <Col span={11}>
+              {
+                // backboard
+                this.state.backboard.map(b => {
+                  return (<Square top={b.top} left={b.left} width={b.width} height={b.height} zIndex={b.zIndex}
+                                  border={b.border} text={b.text} backgroundColor={b.backgroundColor}
+                                  rotatable={false} reversible={false}
+                                  key={`backboard-${b.key}`}>
+                    {
+                      (b.text === "may" || b.text === "01") &&
+                      <div style={{fontSize: "0.8em"}} key={`backboard-test-${b.key}`}>
+                        {`top: ${b.top}`} <br/>
+                        {`left: ${b.left}`} <br/>
+                      </div>
+                    }
+                    {
+                      (b.text === "january") &&
+                      <div style={{fontSize: "0.8em"}} key={`backboard-test-${b.key}`}>
+                        {`dx: ${minX} ${maxX}`} <br/>
+                        {`dy: ${minY} ${maxY}`} <br/>
+                      </div>
+                    }
+                  </Square>)
+                })
+              }
+            </Col>
+          }
+          {
+            // pick up pieces
+            <Col span={8}>
+              <Row>
+                <List
+                  grid={{column: 5}}
+                  dataSource={Pieces}
+                  renderItem={(piece) => (
+                    <List.Item>
+                      {piece.name}
+                      <Square top={0} left={0} pieceName={piece.name} key={`piece-pickup-placeholder-${piece.name}`}
+                              width={Backboard.BoxSize / 3 * piece.matrix.length}
+                              height={Backboard.BoxSize / 3 * piece.matrix.length}
+                              position={"relative"} zIndex={-1}
+                              rotatable={false} reversible={false} movable={false}>
+                      </Square>
+                      <Square key={`piece-pickup-${piece.name}`} pieceName={piece.name}
+                              top={Backboard.BoxSize / 3} left={Backboard.BoxSize / 3}
+                              width={0} height={0}
+                              maxX={maxX} maxY={maxY} minX={minX} minY={minY}
+                              matrix={piece.matrix} boxBackgroundColor={piece.color} zIndex={10}
+                              boxSize={Backboard.BoxSize / 3} position={"absolute"} boxCursor={"pointer"}
+                              opacity={0.92}
+                              rotatable={false} reversible={false} movable={false}>
+                      </Square>
+                    </List.Item>
+                  )}
+                />
+              </Row>
+              <Row>
+                <Col span={8}>
+                  <DatePicker format="YYYY-MM-DD" allowClear={false} onChange={this.onDateChange}
+                              defaultValue={dayjs()}/>
+                </Col>
+                <Col span={12}>
+                  <Button type="primary" onClick={this.resolve}>
+                    <FormattedMessage id={"resolve"}></FormattedMessage>
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+          }
+          <Col span={1} offset={1}>
+            <SelectLang className={"ant-dropdown-trigger css-lye32u"} reload={false}/>
           </Col>
-        }
-        {
-          // pick up pieces
-          <Col span={8}>
-            <Row>
-              <List
-                grid={{gutter: 16, column: 4}}
-                dataSource={Pieces}
-                renderItem={(piece) => (
-                  <List.Item>
-                    {piece.name}
-                    <Square top={0} left={0} pieceName={piece.name} key={`piece-pickup-placeholder-${piece.name}`}
-                            width={Backboard.BoxSize / 3 * piece.matrix.length}
-                            height={Backboard.BoxSize / 3 * piece.matrix.length}
-                            position={"relative"} zIndex={-1}
-                            rotatable={false} reversible={false} movable={false}>
-                    </Square>
-                    <Square key={`piece-pickup-${piece.name}`} pieceName={piece.name}
-                            top={Backboard.BoxSize / 3} left={Backboard.BoxSize / 3}
-                            width={0}
-                            height={0}
-                            matrix={piece.matrix} boxBackgroundColor={piece.color} zIndex={10}
-                            boxSize={Backboard.BoxSize / 3} position={"absolute"} boxCursor={"pointer"}
-                            opacity={0.92}
-                            rotatable={false} reversible={false} movable={false}>
-                    </Square>
-                  </List.Item>
-                )}
-              />
-            </Row>
-            <Row>
-              <Col span={8}>
-                <DatePicker format="YYYY-MM-DD" allowClear={false} onChange={this.onDateChange} defaultValue={dayjs()}/>
-              </Col>
-              <Col span={12}>
-                <Button type="primary" onClick={this.resolve}>
-                  <FormattedMessage id={"resolve"}></FormattedMessage>
-                </Button>
-              </Col>
-            </Row>
-          </Col>
-        }
-        <Col span={1} offset={1}>
-          <SelectLang className={"ant-dropdown-trigger css-lye32u"} reload={false}/>
-        </Col>
-      </Row>
+        </Row>
+      </div>
     </div>)
   }
 }
