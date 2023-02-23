@@ -1,6 +1,5 @@
 import React from 'react';
 import Piece from './Piece';
-import {Transformer} from "@jest/transform";
 import {FormattedMessage} from "@@/exports";
 
 export class Box {

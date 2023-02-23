@@ -103,18 +103,17 @@ export default class Square extends PureComponent <SquareProps, any> {
         }
       }, () => {
         const onDown = (e) => {
-        if (e?.target?.attributes?.name?.value === "reverse" || e?.target?.attributes?.name?.value === "rotate") {
-          return
-        }
-   this.setState((state2) => {
-                        console.log("called..")
-                              document.removeEventListener('mousedown', onDown)
+          if (e?.target?.attributes?.name?.value === "reverse" || e?.target?.attributes?.name?.value === "rotate") {
+            return
+          }
+          this.setState((state2) => {
+            document.removeEventListener('mousedown', onDown)
 
-                          return {
-                            ...state2, rotatable: false, reversible: false,
-                          }
-                        })
-                      }
+            return {
+              ...state2, rotatable: false, reversible: false,
+            }
+          })
+        }
         document.addEventListener('mousedown', onDown)
       })
     }
@@ -123,7 +122,7 @@ export default class Square extends PureComponent <SquareProps, any> {
   }
 
   onRotate = () => {
-   const matrix = MatrixUtil.rotate(this.state.matrix);
+    const matrix = MatrixUtil.move2TopLeft(MatrixUtil.rotate(this.state.matrix));
     this.setState(state => {
       return {
         ...state, matrix
@@ -132,16 +131,12 @@ export default class Square extends PureComponent <SquareProps, any> {
   }
 
   onReverse = () => {
-    const matrix = MatrixUtil.reverse(this.state.matrix);
+    const matrix = MatrixUtil.move2TopLeft(MatrixUtil.reverse(this.state.matrix));
     this.setState(state => {
       return {
         ...state, matrix
       }
     })
-  }
-
-  onBlur = () => {
-    console.log("haha")
   }
 
   render() {
@@ -230,7 +225,6 @@ export default class Square extends PureComponent <SquareProps, any> {
             }
             return (
               <StyledDiv onMouseDown={box.onDrag}
-                         onBlur={this.onBlur}
                          key={box.key} style={boxStyle}>
                 {
                   (box.top === 0 && box.left === 0 && rotatable) &&

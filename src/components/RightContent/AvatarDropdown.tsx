@@ -1,13 +1,13 @@
-import { outLogin } from '@/services/ant-design-pro/api';
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { useEmotionCss } from '@ant-design/use-emotion-css';
-import { history, useModel } from '@umijs/max';
-import { Avatar, Spin } from 'antd';
-import { setAlpha } from '@ant-design/pro-components';
-import { stringify } from 'querystring';
-import type { MenuInfo } from 'rc-menu/lib/interface';
-import React, { useCallback } from 'react';
-import { flushSync } from 'react-dom';
+import {outLogin} from '@/services/ant-design-pro/api';
+import {LogoutOutlined, SettingOutlined, UserOutlined} from '@ant-design/icons';
+import {useEmotionCss} from '@ant-design/use-emotion-css';
+import {history, useModel} from '@umijs/max';
+import {Avatar, Spin} from 'antd';
+import {setAlpha} from '@ant-design/pro-components';
+import {stringify} from 'querystring';
+import type {MenuInfo} from 'rc-menu/lib/interface';
+import React, {useCallback} from 'react';
+import {flushSync} from 'react-dom';
 import HeaderDropdown from '../HeaderDropdown';
 
 export type GlobalHeaderRightProps = {
@@ -15,10 +15,10 @@ export type GlobalHeaderRightProps = {
 };
 
 const Name = () => {
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
+  const {initialState} = useModel('@@initialState');
+  const {currentUser} = initialState || {};
 
-  const nameClassName = useEmotionCss(({ token }) => {
+  const nameClassName = useEmotionCss(({token}) => {
     return {
       width: '70px',
       height: '48px',
@@ -36,10 +36,10 @@ const Name = () => {
 };
 
 const AvatarLogo = () => {
-  const { initialState } = useModel('@@initialState');
-  const { currentUser } = initialState || {};
+  const {initialState} = useModel('@@initialState');
+  const {currentUser} = initialState || {};
 
-  const avatarClassName = useEmotionCss(({ token }) => {
+  const avatarClassName = useEmotionCss(({token}) => {
     return {
       marginRight: '8px',
       color: token.colorPrimary,
@@ -51,16 +51,16 @@ const AvatarLogo = () => {
     };
   });
 
-  return <Avatar size="small" className={avatarClassName} src={currentUser?.avatar} alt="avatar" />;
+  return <Avatar size="small" className={avatarClassName} src={currentUser?.avatar} alt="avatar"/>;
 };
 
-const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
+const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu}) => {
   /**
    * 退出登录，并且将当前的 url 保存
    */
   const loginOut = async () => {
     await outLogin();
-    const { search, pathname } = window.location;
+    const {search, pathname} = window.location;
     const urlParams = new URL(window.location.href).searchParams;
     /** 此方法会跳转到 redirect 参数所在的位置 */
     const redirect = urlParams.get('redirect');
@@ -74,7 +74,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
       });
     }
   };
-  const actionClassName = useEmotionCss(({ token }) => {
+  const actionClassName = useEmotionCss(({token}) => {
     return {
       display: 'flex',
       height: '48px',
@@ -89,14 +89,14 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
       },
     };
   });
-  const { initialState, setInitialState } = useModel('@@initialState');
+  const {initialState, setInitialState} = useModel('@@initialState');
 
   const onMenuClick = useCallback(
     (event: MenuInfo) => {
-      const { key } = event;
+      const {key} = event;
       if (key === 'logout') {
         flushSync(() => {
-          setInitialState((s) => ({ ...s, currentUser: undefined }));
+          setInitialState((s) => ({...s, currentUser: undefined}));
         });
         loginOut();
         return;
@@ -122,7 +122,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     return loading;
   }
 
-  const { currentUser } = initialState;
+  const {currentUser} = initialState;
 
   if (!currentUser || !currentUser.name) {
     return loading;
@@ -131,24 +131,24 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const menuItems = [
     ...(menu
       ? [
-          {
-            key: 'center',
-            icon: <UserOutlined />,
-            label: '个人中心',
-          },
-          {
-            key: 'settings',
-            icon: <SettingOutlined />,
-            label: '个人设置',
-          },
-          {
-            type: 'divider' as const,
-          },
-        ]
+        {
+          key: 'center',
+          icon: <UserOutlined/>,
+          label: '个人中心',
+        },
+        {
+          key: 'settings',
+          icon: <SettingOutlined/>,
+          label: '个人设置',
+        },
+        {
+          type: 'divider' as const,
+        },
+      ]
       : []),
     {
       key: 'logout',
-      icon: <LogoutOutlined />,
+      icon: <LogoutOutlined/>,
       label: '退出登录',
     },
   ];
@@ -162,8 +162,8 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
       }}
     >
       <span className={actionClassName}>
-        <AvatarLogo />
-        <Name />
+        <AvatarLogo/>
+        <Name/>
       </span>
     </HeaderDropdown>
   );

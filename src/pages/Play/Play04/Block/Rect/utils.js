@@ -1,6 +1,6 @@
 export const getLength = (x, y) => Math.sqrt(x * x + y * y)
 
-export const getAngle = ({ x: x1, y: y1 }, { x: x2, y: y2 }) => {
+export const getAngle = ({x: x1, y: y1}, {x: x2, y: y2}) => {
   const dot = x1 * x2 + y1 * y2
   const det = x1 * y2 - y1 * x2
   const angle = Math.atan2(det, dot) / Math.PI * 180
@@ -20,7 +20,7 @@ const setWidthAndDeltaW = (width, deltaW, minWidth) => {
     deltaW = minWidth - width
     width = minWidth
   }
-  return { width, deltaW }
+  return {width, deltaW}
 }
 
 const setHeightAndDeltaH = (height, deltaH, minHeight) => {
@@ -31,11 +31,11 @@ const setHeightAndDeltaH = (height, deltaH, minHeight) => {
     deltaH = minHeight - height
     height = minHeight
   }
-  return { height, deltaH }
+  return {height, deltaH}
 }
 
 export const getNewStyle = (type, rect, deltaW, deltaH, ratio, minWidth, minHeight) => {
-  let { width, height, centerX, centerY, rotateAngle } = rect
+  let {width, height, centerX, centerY, rotateAngle} = rect
   const widthFlag = width < 0 ? -1 : 1
   const heightFlag = height < 0 ? -1 : 1
   width = Math.abs(width)
@@ -188,17 +188,17 @@ export const getNewStyle = (type, rect, deltaW, deltaH, ratio, minWidth, minHeig
   }
 }
 
-const cursorStartMap = { n: 0, ne: 1, e: 2, se: 3, s: 4, sw: 5, w: 6, nw: 7 }
-const cursorDirectionArray = [ 'n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw' ]
-const cursorMap = { 0: 0, 1: 1, 2: 2, 3: 2, 4: 3, 5: 4, 6: 4, 7: 5, 8: 6, 9: 6, 10: 7, 11: 8 }
+const cursorStartMap = {n: 0, ne: 1, e: 2, se: 3, s: 4, sw: 5, w: 6, nw: 7}
+const cursorDirectionArray = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
+const cursorMap = {0: 0, 1: 1, 2: 2, 3: 2, 4: 3, 5: 4, 6: 4, 7: 5, 8: 6, 9: 6, 10: 7, 11: 8}
 export const getCursor = (rotateAngle, d) => {
-  const increment = cursorMap[ Math.floor(rotateAngle / 30) ]
-  const index = cursorStartMap[ d ]
+  const increment = cursorMap[Math.floor(rotateAngle / 30)]
+  const index = cursorStartMap[d]
   const newIndex = (index + increment) % 8
-  return cursorDirectionArray[ newIndex ]
+  return cursorDirectionArray[newIndex]
 }
 
-export const centerToTL = ({ centerX, centerY, width, height, rotateAngle }) => ({
+export const centerToTL = ({centerX, centerY, width, height, rotateAngle}) => ({
   top: centerY - height / 2,
   left: centerX - width / 2,
   width,
@@ -206,7 +206,7 @@ export const centerToTL = ({ centerX, centerY, width, height, rotateAngle }) => 
   rotateAngle
 })
 
-export const tLToCenter = ({ top, left, width, height, rotateAngle }) => ({
+export const tLToCenter = ({top, left, width, height, rotateAngle}) => ({
   position: {
     centerX: left + width / 2,
     centerY: top + height / 2

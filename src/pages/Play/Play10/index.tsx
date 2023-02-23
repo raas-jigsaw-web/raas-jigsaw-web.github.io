@@ -4,7 +4,6 @@ import {Backboard, Days, Months, Pieces, Texts, Weeks} from "./Block/Block";
 import {Button, Col, DatePicker, List, message, Row} from 'antd';
 import dayjs from 'dayjs';
 import {formatMessage, FormattedMessage, SelectLang} from "@umijs/max";
-import {history} from "@@/exports";
 
 export default class PlayPage extends React.Component<any, any> {
 
@@ -136,7 +135,7 @@ export default class PlayPage extends React.Component<any, any> {
             </Row>
             <Row>
               <Col span={8}>
-                <DatePicker format="YYYY-MM-DD" allowClear={false} onChange={this.onDateChange} defaultValue={dayjs()} />
+                <DatePicker format="YYYY-MM-DD" allowClear={false} onChange={this.onDateChange} defaultValue={dayjs()}/>
               </Col>
               <Col span={12}>
                 <Button type="primary" onClick={this.resolve}>

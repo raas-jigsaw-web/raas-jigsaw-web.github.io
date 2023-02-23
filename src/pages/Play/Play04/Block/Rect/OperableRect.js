@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, {PureComponent} from 'react'
-import {getAngle, getCursor, getLength} from './utils'
+import {getCursor} from './utils'
 import StyledRect from './StyledRect'
 
 const zoomableMap = {

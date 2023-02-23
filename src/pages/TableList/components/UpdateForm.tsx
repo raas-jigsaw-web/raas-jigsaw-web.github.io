@@ -6,8 +6,8 @@ import {
   ProFormTextArea,
   StepsForm,
 } from '@ant-design/pro-components';
-import { FormattedMessage, useIntl } from '@umijs/max';
-import { Modal } from 'antd';
+import {FormattedMessage, useIntl} from '@umijs/max';
+import {Modal} from 'antd';
 import React from 'react';
 
 export type FormValueType = {
@@ -36,7 +36,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         return (
           <Modal
             width={640}
-            bodyStyle={{ padding: '32px 40px 48px' }}
+            bodyStyle={{padding: '32px 40px 48px'}}
             destroyOnClose
             title={intl.formatMessage({
               id: 'pages.searchTable.updateForm.ruleConfig',

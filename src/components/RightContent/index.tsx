@@ -1,8 +1,6 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { useEmotionCss } from '@ant-design/use-emotion-css';
-import { SelectLang, useModel } from '@umijs/max';
+import {useEmotionCss} from '@ant-design/use-emotion-css';
+import {SelectLang, useModel} from '@umijs/max';
 import React from 'react';
-import Avatar from './AvatarDropdown';
 
 export type SiderTheme = 'light' | 'dark';
 
@@ -17,7 +15,7 @@ const GlobalHeaderRight: React.FC = () => {
     };
   });
 
-  const actionClassName = useEmotionCss(({ token }) => {
+  const actionClassName = useEmotionCss(({token}) => {
     return {
       display: 'flex',
       float: 'right',
@@ -33,7 +31,7 @@ const GlobalHeaderRight: React.FC = () => {
     };
   });
 
-  const { initialState } = useModel('@@initialState');
+  const {initialState} = useModel('@@initialState');
 
   if (!initialState || !initialState.settings) {
     return null;
@@ -50,7 +48,7 @@ const GlobalHeaderRight: React.FC = () => {
       {/*  <QuestionCircleOutlined />*/}
       {/*</span>*/}
       {/*<Avatar />*/}
-      <SelectLang className={actionClassName} reload={false} />
+      <SelectLang className={actionClassName} reload={false}/>
     </div>
   );
 };

@@ -126,10 +126,6 @@ export default class Square extends PureComponent <SquareProps, any> {
     })
   }
 
-  onBlur = () => {
-    console.log("haha")
-  }
-
   render() {
     const {
       key,
@@ -216,7 +212,6 @@ export default class Square extends PureComponent <SquareProps, any> {
             }
             return (
               <StyledDiv onMouseDown={box.onDrag}
-                         onBlur={this.onBlur}
                          key={box.key} style={boxStyle}>
                 {
                   (box.top === 0 && box.left === 0 && rotatable) &&
