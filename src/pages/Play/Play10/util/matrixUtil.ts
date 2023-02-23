@@ -179,8 +179,46 @@ export class MatrixUtil {
     }
   }
 
+  public static top0(a: number[][]) {
+    if (!this.operable(a)) {
+      throw new Error();
+    }
+    const b: number[][] = this.array(a.length, a[0].length);
+    if (b.length >= 3) {
+      b[0][0] = a[1][0];
+      b[0][1] = a[1][1];
+      b[0][2] = a[1][2];
+      b[1][0] = a[2][0];
+      b[1][1] = a[2][1];
+      b[1][2] = a[2][2];
+    }
+    if (b.length >= 4) {
+      b[0][3] = a[1][3];
+      b[1][3] = a[2][3];
+      b[2][0] = a[3][0];
+      b[2][1] = a[3][1];
+      b[2][2] = a[3][2];
+      b[2][3] = a[3][3];
+    }
+    return b;
+  }
+
+  public static top(a: number[][]) {
+    if (!this.operable(a)) {
+      throw new Error();
+    }
+    const sum = this.sum(a);
+    let r = this.copy(a);
+    while (true) {
+      const b = this.top0(r);
+      if (sum !== this.sum(b)) {
+        return r;
+      }
+      r = b;
+    }
+  }
+
   public static move2TopLeft(a: number[][]) {
-    console.log(a)
-    return this.left(a);
+    return this.top(this.left(a));
   }
 }
