@@ -70,6 +70,11 @@ export default [
         path: '/play/play11',
         component: './Play/Play11',
       },
+      {
+        name: 'play.play12',
+        path: '/play/play12',
+        component: './Play/Play12',
+      },
     ]
   },
   {

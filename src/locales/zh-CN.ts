@@ -38,6 +38,7 @@ export default {
   'kept': '空白',
   'resolve': '查询解法',
   'develop.wait': '正在开发 ..',
+  'set.goal': '设置目标',
   ...pages,
   ...globalHeader,
   ...menu,

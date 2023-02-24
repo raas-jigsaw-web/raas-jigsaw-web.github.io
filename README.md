@@ -16,7 +16,7 @@ Request /resolve
 |-------|--------|-----------|------------------|---------|
 | month | number | N         | 0-11, 0 is Jan   | 0       |
 | day   | number | N         | 0-30, 0 is 1st   | 0       |
-| week  | number | N         | 0-6, 0 is Monday | 0       |
+| week  | number | N         | 0-6, 0 is Sunday | 0       |
 | count | number | N         | answer(s) count  | 0       |
 
 Response application/json

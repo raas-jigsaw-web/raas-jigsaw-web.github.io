@@ -72,6 +72,16 @@ export default class PlayPage extends React.Component<any, any> {
     message.info(`${formatMessage({
       id: 'develop.wait',
     })}`)
+
+    fetch("http://localhost:8080/resolve?count=10").then(resp => {
+      return resp.json()
+    }).then(json => {
+      console.log(json)
+    }).catch(err =>{
+      message.info(`${formatMessage({
+        id: err,
+      })}`)
+    })
   }
 
   render() {

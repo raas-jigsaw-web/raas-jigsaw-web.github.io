@@ -38,6 +38,7 @@ export default {
   'kept': 'Kept',
   'resolve': 'Resolve it',
   'develop.wait': 'In development, please wait ..',
+  'set.goal': 'Set Goal',
   ...globalHeader,
   ...menu,
   ...settingDrawer,
