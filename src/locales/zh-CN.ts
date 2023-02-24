@@ -39,6 +39,7 @@ export default {
   'resolve': '查询解法',
   'develop.wait': '正在开发 ..',
   'set.goal': '设置目标',
+  'server.computing': '计算任务已经提交, 稍候重试以获取答案..',
   ...pages,
   ...globalHeader,
   ...menu,

@@ -39,6 +39,7 @@ export default {
   'resolve': 'Resolve it',
   'develop.wait': 'In development, please wait ..',
   'set.goal': 'Set Goal',
+  'server.computing': 'Server\'s computing, you may re-try to get answer(s) later ..',
   ...globalHeader,
   ...menu,
   ...settingDrawer,

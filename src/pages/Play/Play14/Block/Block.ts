@@ -95,7 +95,7 @@ export class Backboard {
   static border = "1px solid rgb(25,140,250)";
   static Id = "backboard-id";
   static LoadMore = 10;
-  static Url = "https://raas-jigsaw-dev.autodesk.com";
+  static Url = "http://localhost:8080";
 }
 
 export const Texts: string[][] = [
