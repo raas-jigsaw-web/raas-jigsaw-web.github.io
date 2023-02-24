@@ -8,6 +8,8 @@ import {formatMessage, FormattedMessage, SelectLang} from "@umijs/max";
 export default class PlayPage extends React.Component<any, any> {
 
   dateSet?: boolean
+  resultsCount?: object = {}
+  queryDate?: string = dayjs().format("MM/DD/YYYY")
 
   constructor(props: any, context: any) {
     super(props, context);
@@ -44,6 +46,7 @@ export default class PlayPage extends React.Component<any, any> {
     const week = e.$W; // monday: 1, sunday: 0
     const day = e.$D - 1; // 1st: 1
     const month = e.$M; // Jan: 0
+    this.queryDate = dayjs(e.$d).format("MM/DD/YYYY")
 
     if (week === this.state.week && day === this.state.day && month === this.state.month) {
       return
@@ -69,10 +72,17 @@ export default class PlayPage extends React.Component<any, any> {
   }
 
   resolve = () => {
-    fetch("http://localhost:8080/resolve?count=10").then(resp => {
+    let dateResultCount = 0;
+    if (this.resultsCount && this.resultsCount[this.queryDate]) {
+      dateResultCount = this.resultsCount[this.queryDate];
+    }
+    console.log(this.resultsCount)
+    let count = Math.max(10, (dateResultCount + 5));
+    fetch(`https://raas-jigsaw-dev.autodesk.com/resolve?date=${this.queryDate}&count=${count}`).then(resp => {
       return resp.json()
     }).then(json => {
       if (json && 0 === json.code && json.data && 0 < json.data.length) {
+        this.resultsCount[this.queryDate] = json.count
         this.setState(state => {
           const results = []
           for (const i in json.data) {
@@ -82,7 +92,7 @@ export default class PlayPage extends React.Component<any, any> {
               for (let k = 0; k < matrix[0].length; k++) {
                 const box: SquareProps = new SquareProps()
                 box.key = `result-${i}-${j}-${k}`
-                const size = Backboard.BoxSize / 5
+                const size = Backboard.BoxSize / 3
                 box.top = size * j
                 box.left = size * k
                 box.width = size
@@ -92,10 +102,14 @@ export default class PlayPage extends React.Component<any, any> {
                 if ('`' !== pieceName) {
                   box.backgroundColor = Colors[pieceName];
                 } else {
+                  let isEmpty: boolean = false
                   for (const empty of Empties) {
                     if (j === empty[0] && k === empty[1]) {
-                      box.backgroundColor = Backboard.backgroundColorHighLight;
+                      isEmpty = true;
                     }
+                  }
+                  if (!isEmpty) {
+                    // box.backgroundColor = Backboard.backgroundColorHighLight;
                   }
                 }
                 boxes.push(box)
@@ -114,7 +128,7 @@ export default class PlayPage extends React.Component<any, any> {
       message.info(`${formatMessage({
         id: err,
       })}`)
-    })
+    });
   }
 
   render() {
@@ -205,14 +219,21 @@ export default class PlayPage extends React.Component<any, any> {
                         onChange: (page) => {
                           console.log(`page: ${page}`);
                         },
-                        pageSize: 3,
+                        pageSize: 1,
                       }}
                       dataSource={results}
-                      renderItem={(item) => (
-                        <List.Item
-                          key={"item.title"}
-                        >
-                          {JSON.stringify(item)}
+                      renderItem={(boxes) => (
+                        <List.Item>
+                          {
+                            boxes && boxes.map(box => {
+                              return (
+                                <Square backgroundColor={box.backgroundColor} key={box.key}
+                                        top={box.top + 100} left={box.left + 20} width={box.width}
+                                        height={box.height}></Square>
+                              )
+                            })
+                          }
+
                         </List.Item>
                       )}
                     />

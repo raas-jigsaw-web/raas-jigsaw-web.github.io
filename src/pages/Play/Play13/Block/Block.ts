@@ -91,7 +91,7 @@ export class Backboard {
   static Columns = 7;
   static BoxSize = 90;
   static backgroundColor = ["white", "#eee"];
-  static backgroundColorHighLight = "#f1c309";
+  static backgroundColorHighLight = "#f1c205";
   static border = "1px solid rgb(25,140,250)";
   static Id = "backboard-id";
 }
@@ -122,5 +122,5 @@ export const Months = [
   [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5],
 ]
 export const Empties = [
-  [0, 6], [0, 7], [7, 0], [7, 1], [7, 2], [7, 3],
+  [0, 6], [1, 6], [7, 0], [7, 1], [7, 2], [7, 3],
 ]
