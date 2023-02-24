@@ -85,7 +85,7 @@ export default [
   {
     path: '/welcome',
     layout: false,
-    component: './Play/Play11',
+    component: './Play/Play13',
   },
   {
     path: '/',
