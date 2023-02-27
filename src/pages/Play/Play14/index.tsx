@@ -76,7 +76,7 @@ export default class PlayPage extends React.Component<any, any> {
     if (this.resultsCount && this.resultsCount[this.queryDate]) {
       dateResultCount = this.resultsCount[this.queryDate];
     }
-    let count = Math.max(10, (dateResultCount + Backboard.LoadMore));
+    let count = Math.max(50, (dateResultCount + Backboard.LoadMore));
     fetch(`${Backboard.Url}/resolve?date=${this.queryDate}&count=${count}`).then(resp => {
       return resp.json()
     }).then(json => {
