@@ -1,0 +1,8 @@
+# dist/ must be present after local build — do not ignore it
+node_modules
+.git
+.idea
+docs
+*.log
+npm-debug.log*
+.DS_Store
