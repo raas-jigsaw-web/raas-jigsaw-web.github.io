@@ -90,6 +90,11 @@ export default [
         path: '/play/play15',
         component: './Play/Play15',
       },
+      {
+        name: 'play16',
+        path: '/play/play16',
+        component: './Play/Play16',
+      },
     ]
   },
   {
@@ -99,7 +104,7 @@ export default [
   },
   {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/play/play16',
   },
   {
     path: '*',

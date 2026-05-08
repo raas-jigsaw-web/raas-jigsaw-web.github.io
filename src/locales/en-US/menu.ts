@@ -28,6 +28,7 @@ export default {
   'menu.play.play02': 'Play02',
   'menu.play.play14': 'Play14 — Exhaustive solver',
   'menu.play.play15': 'Play15 — Optimized solver (MRV)',
+  'menu.play.play16': 'Play16 — Local MRV (no API)',
   'menu.list.basic-list': 'Basic List',
   'menu.list.card-list': 'Card List',
   'menu.list.search-list': 'Search List',

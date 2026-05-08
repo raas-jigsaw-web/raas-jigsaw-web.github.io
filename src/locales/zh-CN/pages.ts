@@ -66,4 +66,7 @@ export default {
   'pages.play.resolveTiming.content': '等待时长：{ms} 毫秒',
   'pages.play15.hint':
     '本页请求 API 时附带 solver=mrv（MRV + 前向剪枝）。穷举算法演示仍在 Play13。',
+  'pages.play16.hint':
+    '本页在浏览器内用 TypeScript 运行与后端一致的 MRV + LCV 求解（不调用 `/resolve`，便于离线/GitHub Pages 演示）。',
+  'pages.play16.badDate': '日期格式无效，请使用 MM/DD/YYYY。',
 };

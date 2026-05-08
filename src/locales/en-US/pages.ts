@@ -69,4 +69,7 @@ export default {
   'pages.play.resolveTiming.content': 'Wait time: {ms} ms',
   'pages.play15.hint':
     'This page calls the API with solver=mrv (MRV + forward-checking). Legacy exhaustive solver remains at Play13.',
+  'pages.play16.hint':
+    'This page runs the same MRV + LCV solver as the API in TypeScript inside the browser (no `/resolve` call — works offline / on GitHub Pages).',
+  'pages.play16.badDate': 'Invalid date — expected MM/DD/YYYY.',
 };

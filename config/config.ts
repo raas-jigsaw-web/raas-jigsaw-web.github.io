@@ -16,6 +16,13 @@ export default defineConfig({
   hash: true,
 
   /**
+   * Play16 client-side MRV uses bigint board masks — minify must accept ES2020 bigint literals.
+   */
+  jsMinifierOptions: {
+    target: ['chrome90', 'es2020'],
+  },
+
+  /**
    * @name 兼容性设置
    * @description 设置 ie11 不一定完美兼容，需要检查自己使用的所有依赖
    * @doc https://umijs.org/docs/api/config#targets
@@ -151,8 +158,13 @@ export default defineConfig({
     strategy: 'normal',
   },
   requestRecord: {},
+  /**
+   * Relative asset URLs (`./umi.*.js`) so static hosting works under any subpath
+   * (e.g. GitHub Pages `…/poc-challenge/dist/`). Umi `max build` also applies this; `max dev` tolerates `./`.
+   * @see https://umijs.org/docs/api/config#publicpath
+   */
+  publicPath: './',
   // base: REACT_APP_ENV === 'dev' ? '/' : '/raas/jigsaw-web/',
-  // publicPath: REACT_APP_ENV === 'dev' ? '/' : '/raas/jigsaw-web/',
   // https://v4-pro.ant.design/docs/deploy
   history: { type: 'hash' },
 });
