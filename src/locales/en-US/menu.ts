@@ -26,6 +26,7 @@ export default {
   'menu.play': 'Play',
   'menu.play.play01': 'Play01',
   'menu.play.play02': 'Play02',
+  'menu.play.play15': 'Play15 (MRV)',
   'menu.list.basic-list': 'Basic List',
   'menu.list.card-list': 'Card List',
   'menu.list.search-list': 'Search List',

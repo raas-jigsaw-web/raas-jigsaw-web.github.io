@@ -85,6 +85,11 @@ export default [
         path: '/play/play14',
         component: './Play/Play14',
       },
+      {
+        name: 'play.play15',
+        path: '/play/play15',
+        component: './Play/Play15',
+      },
     ]
   },
   {

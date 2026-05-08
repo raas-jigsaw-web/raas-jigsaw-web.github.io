@@ -1,20 +1,20 @@
 import React from 'react';
-import Square, {SquareProps} from './Square/Square';
-import {Backboard, Colors, Days, Empties, Months, Pieces, Texts, Weeks} from "./Block/Block";
-import {Button, Col, DatePicker, List, message, Modal, Row} from 'antd';
+import Square, {SquareProps} from '../Play13/Square/Square';
+import {Backboard, Colors, Days, Empties, Months, Pieces, Texts, Weeks} from '../Play13/Block/Block';
+import {Button, Col, DatePicker, List, message, Modal, Row, Typography} from 'antd';
 import dayjs from 'dayjs';
-import {formatMessage, FormattedMessage, SelectLang} from "@umijs/max";
+import {formatMessage, FormattedMessage, SelectLang} from '@umijs/max';
 
+/** Same demo as Play13; `/resolve` requests use {@code solver=mrv} (backend MRV + forward-checking DFS). */
 export default class PlayPage extends React.Component<any, any> {
 
   dateSet?: boolean
   resultsCount?: object = {}
-  queryDate?: string = dayjs().format("MM/DD/YYYY")
+  queryDate?: string = dayjs().format('MM/DD/YYYY')
 
   constructor(props: any, context: any) {
     super(props, context);
 
-    // backboard
     const backboard: SquareProps[] = []
     for (let i = 0; i < Backboard.Rows; i++) {
       for (let j = 0; j < Backboard.Columns; j++) {
@@ -24,11 +24,11 @@ export default class PlayPage extends React.Component<any, any> {
         box.left = Backboard.BoxSize * j
         box.width = Backboard.BoxSize
         box.height = Backboard.BoxSize
-        box.zIndex = 0; // not less than 0
+        box.zIndex = 0;
         box.text = Texts[i][j]
 
-        if (box.text === "") {
-          box.backgroundColor = ""; // unused box
+        if (box.text === '') {
+          box.backgroundColor = '';
         } else {
           box.backgroundColor = Backboard.backgroundColor[(i + j) % 2]
           box.border = Backboard.border
@@ -48,10 +48,10 @@ export default class PlayPage extends React.Component<any, any> {
   }
 
   onDateChange = (e) => {
-    const week = e.$W; // monday: 1, sunday: 0
-    const day = e.$D - 1; // 1st: 1
-    const month = e.$M; // Jan: 0
-    this.queryDate = dayjs(e.$d).format("MM/DD/YYYY")
+    const week = e.$W;
+    const day = e.$D - 1;
+    const month = e.$M;
+    this.queryDate = dayjs(e.$d).format('MM/DD/YYYY')
 
     if (week === this.state.week && day === this.state.day && month === this.state.month) {
       return
@@ -61,8 +61,8 @@ export default class PlayPage extends React.Component<any, any> {
       for (let i = 0; i < Backboard.Rows; i++) {
         for (let j = 0; j < Backboard.Columns; j++) {
           const box = backboard[i * Backboard.Columns + j]
-          if (box.text === "") {
-            box.backgroundColor = ""; // unused box
+          if (box.text === '') {
+            box.backgroundColor = '';
           } else {
             box.backgroundColor = Backboard.backgroundColor[(i + j) % 2]
             box.border = Backboard.border
@@ -82,9 +82,10 @@ export default class PlayPage extends React.Component<any, any> {
       dateResultCount = this.resultsCount[this.queryDate];
     }
     let count = Math.max(Backboard.ResolveMinCount, dateResultCount + Backboard.LoadMore);
+    const url = `${Backboard.Url}/resolve?date=${this.queryDate}&count=${count}&solver=mrv`;
     const startedAt = performance.now();
     this.setState({ resolveLoading: true });
-    fetch(`${Backboard.Url}/resolve?date=${this.queryDate}&count=${count}`)
+    fetch(url)
       .then((resp) => resp.json())
       .then((json) => {
         this.resultsCount[this.queryDate] = json.count || 0;
@@ -101,7 +102,7 @@ export default class PlayPage extends React.Component<any, any> {
                   box.key = `result-${i}-${j}-${k}`;
                   const size = Backboard.BoxSize / 3;
                   box.top = size * j;
-                  box.left = size * k + boxesList.length * Backboard.BoxSize * 3; // display multiple results in one row
+                  box.left = size * k + boxesList.length * Backboard.BoxSize * 3;
                   box.width = size;
                   box.height = size;
                   const pieceName = matrix[j][k];
@@ -116,7 +117,6 @@ export default class PlayPage extends React.Component<any, any> {
                       }
                     }
                     if (!isEmpty) {
-                      // box.backgroundColor = Backboard.backgroundColorHighLight;
                     }
                   }
                   boxes.push(box);
@@ -168,13 +168,15 @@ export default class PlayPage extends React.Component<any, any> {
     }
     const {minX, minY, maxX, maxY, results,} = this.state
     return (<div>
-      <div style={{padding: "2em 8em 0"}}>
+      <div style={{padding: '2em 8em 0'}}>
+        <Typography.Paragraph type="secondary" style={{marginBottom: 16}}>
+          <FormattedMessage id="pages.play15.hint" />
+        </Typography.Paragraph>
         <div id={Backboard.Id}>
           <Row>
             {
               <Col span={11}>
                 {
-                  // backboard
                   this.state.backboard.map(b => {
                     return (<Square top={b.top} left={b.left} width={b.width} height={b.height} zIndex={b.zIndex}
                                     border={b.border} text={b.text} backgroundColor={b.backgroundColor}
@@ -186,7 +188,6 @@ export default class PlayPage extends React.Component<any, any> {
               </Col>
             }
             {
-              // pick up pieces
               <Col span={13}>
                 <Row>
                   <Col span={20}>
@@ -197,9 +198,9 @@ export default class PlayPage extends React.Component<any, any> {
                         <List.Item>
                           {piece.name}
                           <Square top={0} left={0} pieceName={piece.name} key={`piece-pickup-placeholder-${piece.name}`}
-                                  width={Backboard.BoxSize / 3 * piece.matrix.length}
-                                  height={Backboard.BoxSize / 3 * piece.matrix.length}
-                                  position={"relative"} zIndex={-1}
+                                  width={Backboard.BoxSize / 3 * piece.matrix!.length}
+                                  height={Backboard.BoxSize / 3 * piece.matrix!.length}
+                                  position={'relative'} zIndex={-1}
                                   rotatable={false} reversible={false} movable={false}>
                           </Square>
                           <Square key={`piece-pickup-${piece.name}`} pieceName={piece.name}
@@ -207,7 +208,7 @@ export default class PlayPage extends React.Component<any, any> {
                                   width={0} height={0}
                                   maxX={maxX} maxY={maxY} minX={minX} minY={minY}
                                   matrix={piece.matrix} boxBackgroundColor={piece.color} zIndex={10}
-                                  boxSize={Backboard.BoxSize / 3} position={"absolute"} boxCursor={"pointer"}
+                                  boxSize={Backboard.BoxSize / 3} position={'absolute'} boxCursor={'pointer'}
                                   opacity={0.92}
                                   rotatable={false} reversible={false} movable={false}>
                           </Square>
@@ -217,24 +218,24 @@ export default class PlayPage extends React.Component<any, any> {
                   </Col>
 
                   <Col span={4}>
-                    <SelectLang className={"ant-dropdown-trigger css-lye32u"} reload={false}/>
+                    <SelectLang className={'ant-dropdown-trigger css-lye32u'} reload={false}/>
                   </Col>
                 </Row>
                 <Row>
                   <Col span={11}>
                   </Col>
-                  <Col span={3} style={{fontSize: "1.2em", textAlign: "right", float: "right"}}>
+                  <Col span={3} style={{fontSize: '1.2em', textAlign: 'right', float: 'right'}}>
                     <big>
-                      <FormattedMessage id={"set.goal"}/>:&nbsp;
+                      <FormattedMessage id={'set.goal'}/>:&nbsp;
                     </big>
                   </Col>
-                  <Col span={5} style={{fontSize: "1.2em", textAlign: "right", float: "right"}}>
-                    <DatePicker format="YYYY-MM-DD" defaultValue={dayjs()} size={"middle"}
+                  <Col span={5} style={{fontSize: '1.2em', textAlign: 'right', float: 'right'}}>
+                    <DatePicker format="YYYY-MM-DD" defaultValue={dayjs()} size={'middle'}
                                 allowClear={false} onChange={this.onDateChange}/>
                   </Col>
-                  <Col span={5} style={{fontSize: "1.2em", textAlign: "right", float: "right"}}>
+                  <Col span={5} style={{fontSize: '1.2em', textAlign: 'right', float: 'right'}}>
                     <Button type="primary" loading={this.state.resolveLoading} onClick={this.resolve}>
-                      <FormattedMessage id={"resolve"}></FormattedMessage>
+                      <FormattedMessage id={'resolve'}></FormattedMessage>
                     </Button>
                   </Col>
                 </Row>

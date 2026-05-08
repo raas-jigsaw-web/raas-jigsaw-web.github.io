@@ -65,4 +65,8 @@ export default {
   'pages.searchTable.tenThousand': '0000',
   'pages.searchTable.batchDeletion': 'batch deletion',
   'pages.searchTable.batchApproval': 'batch approval',
+  'pages.play.resolveTiming.title': 'Resolve finished',
+  'pages.play.resolveTiming.content': 'Wait time: {ms} ms',
+  'pages.play15.hint':
+    'This page calls the API with solver=mrv (MRV + forward-checking). Legacy exhaustive solver remains at Play13.',
 };

@@ -95,6 +95,8 @@ export class Backboard {
   static border = "1px solid rgb(25,140,250)";
   static Id = "backboard-id";
   static LoadMore = 20;
+  /** Minimum `count` sent to `/resolve` (smaller → faster demo defaults). */
+  static ResolveMinCount = 20;
   static Url = "http://localhost:8080";
 }
 

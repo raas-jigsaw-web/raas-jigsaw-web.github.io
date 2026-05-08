@@ -1,7 +1,7 @@
 import React from 'react';
 import Square, {SquareProps} from './Square/Square';
 import {Backboard, Colors, Days, Empties, Months, Pieces, Texts, Weeks} from "./Block/Block";
-import {Button, Col, DatePicker, List, message, Row} from 'antd';
+import {Button, Col, DatePicker, List, message, Modal, Row} from 'antd';
 import dayjs from 'dayjs';
 import {formatMessage, FormattedMessage, SelectLang} from "@umijs/max";
 
@@ -38,7 +38,12 @@ export default class PlayPage extends React.Component<any, any> {
     }
 
     this.state = {
-      backboard, month: 0, day: 0, week: 0, results: []
+      backboard,
+      month: 0,
+      day: 0,
+      week: 0,
+      results: [],
+      resolveLoading: false,
     }
   }
 
@@ -76,69 +81,85 @@ export default class PlayPage extends React.Component<any, any> {
     if (this.resultsCount && this.resultsCount[this.queryDate]) {
       dateResultCount = this.resultsCount[this.queryDate];
     }
-    let count = Math.max(50, (dateResultCount + Backboard.LoadMore));
-    fetch(`${Backboard.Url}/resolve?date=${this.queryDate}&count=${count}`).then(resp => {
-      return resp.json()
-    }).then(json => {
-      this.resultsCount[this.queryDate] = json.count || 0
-      const results = []
-      this.setState(state => {
-        if (json && 0 === json.code && json.data && 0 < json.data.length) {
-          let boxesList = []
-          for (const i in json.data) {
-            const boxes: SquareProps[] = []
-            const matrix = json.data[i].matrix
-            for (let j = 0; j < matrix.length; j++) {
-              for (let k = 0; k < matrix[0].length; k++) {
-                const box: SquareProps = new SquareProps()
-                box.key = `result-${i}-${j}-${k}`
-                const size = Backboard.BoxSize / 3
-                box.top = size * j
-                box.left = size * k + boxesList.length * Backboard.BoxSize * 3 // display multiple results in one row
-                box.width = size
-                box.height = size
-                const pieceName = matrix[j][k];
-                box.pieceName = pieceName
-                if ('`' !== pieceName) {
-                  box.backgroundColor = Colors[pieceName];
-                } else {
-                  let isEmpty: boolean = false
-                  for (const empty of Empties) {
-                    if (j === empty[0] && k === empty[1]) {
-                      isEmpty = true;
+    let count = Math.max(Backboard.ResolveMinCount, dateResultCount + Backboard.LoadMore);
+    const startedAt = performance.now();
+    this.setState({ resolveLoading: true });
+    fetch(`${Backboard.Url}/resolve?date=${this.queryDate}&count=${count}`)
+      .then((resp) => resp.json())
+      .then((json) => {
+        this.resultsCount[this.queryDate] = json.count || 0;
+        const results = [];
+        this.setState((state) => {
+          if (json && 0 === json.code && json.data && 0 < json.data.length) {
+            let boxesList = [];
+            for (const i in json.data) {
+              const boxes: SquareProps[] = [];
+              const matrix = json.data[i].matrix;
+              for (let j = 0; j < matrix.length; j++) {
+                for (let k = 0; k < matrix[0].length; k++) {
+                  const box: SquareProps = new SquareProps();
+                  box.key = `result-${i}-${j}-${k}`;
+                  const size = Backboard.BoxSize / 3;
+                  box.top = size * j;
+                  box.left = size * k + boxesList.length * Backboard.BoxSize * 3; // display multiple results in one row
+                  box.width = size;
+                  box.height = size;
+                  const pieceName = matrix[j][k];
+                  box.pieceName = pieceName;
+                  if ('`' !== pieceName) {
+                    box.backgroundColor = Colors[pieceName];
+                  } else {
+                    let isEmpty: boolean = false;
+                    for (const empty of Empties) {
+                      if (j === empty[0] && k === empty[1]) {
+                        isEmpty = true;
+                      }
+                    }
+                    if (!isEmpty) {
+                      // box.backgroundColor = Backboard.backgroundColorHighLight;
                     }
                   }
-                  if (!isEmpty) {
-                    // box.backgroundColor = Backboard.backgroundColorHighLight;
-                  }
+                  boxes.push(box);
                 }
-                boxes.push(box)
+              }
+              boxesList.push(boxes);
+              if (boxesList.length > 2) {
+                results.push(boxesList);
+                boxesList = [];
               }
             }
-            boxesList.push(boxes)
-            if (boxesList.length > 2) {
+            if (boxesList.length > 0) {
               results.push(boxesList);
-              boxesList = []
             }
+          } else {
+            message.info(
+              `${formatMessage({
+                id: 'server.computing',
+              })}`,
+            );
           }
-          if (boxesList.length > 0) {
-            results.push(boxesList);
-          }
-        } else {
-          message.info(`${formatMessage({
-            id: "server.computing",
-          })}`)
-        }
-        return {
-          ...state, results,
-        }
+          return {
+            ...state,
+            results,
+          };
+        });
+      })
+      .catch((err) => {
+        message.info(
+          `${formatMessage({
+            id: err,
+          })}`,
+        );
+      })
+      .finally(() => {
+        const elapsedMs = Math.round(performance.now() - startedAt);
+        this.setState({ resolveLoading: false });
+        Modal.info({
+          title: formatMessage({ id: 'pages.play.resolveTiming.title' }),
+          content: formatMessage({ id: 'pages.play.resolveTiming.content' }, { ms: elapsedMs }),
+        });
       });
-    }).catch(err => {
-      message.info(`${formatMessage({
-        id: err,
-      })}`)
-    });
-  }
+  };
 
   render() {
     if (!this.dateSet) {
@@ -212,7 +233,7 @@ export default class PlayPage extends React.Component<any, any> {
                                 allowClear={false} onChange={this.onDateChange}/>
                   </Col>
                   <Col span={5} style={{fontSize: "1.2em", textAlign: "right", float: "right"}}>
-                    <Button type="primary" onClick={this.resolve}>
+                    <Button type="primary" loading={this.state.resolveLoading} onClick={this.resolve}>
                       <FormattedMessage id={"resolve"}></FormattedMessage>
                     </Button>
                   </Col>

@@ -62,4 +62,8 @@ export default {
   'pages.searchTable.tenThousand': '万',
   'pages.searchTable.batchDeletion': '批量删除',
   'pages.searchTable.batchApproval': '批量审批',
+  'pages.play.resolveTiming.title': '求解完成',
+  'pages.play.resolveTiming.content': '等待时长：{ms} 毫秒',
+  'pages.play15.hint':
+    '本页请求 API 时附带 solver=mrv（MRV + 前向剪枝）。穷举算法演示仍在 Play13。',
 };
