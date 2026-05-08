@@ -1,6 +1,7 @@
 export default {
   'menu.play': '演示',
-  'menu.play.play15': 'Play15（MRV 优化求解）',
+  'menu.play.play14': 'Play14（穷举算法）',
+  'menu.play.play15': 'Play15（优化算法·MRV）',
   'menu.welcome': '欢迎',
   'menu.more-blocks': '更多区块',
   'menu.home': '首页',

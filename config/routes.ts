@@ -16,77 +16,77 @@ export default [
     name: 'play',
     routes: [
       {
-        name: 'play.play01', // without a name, won't display in menu
+        name: 'play01', // locale: menu.play.play01 (parent name is "play")
         path: '/play/play01',
         component: './Play/Play01',
       },
       {
-        name: 'play.play02',
+        name: 'play02',
         path: '/play/play02',
         component: './Play/Play02',
       },
       {
-        name: 'play.play03',
+        name: 'play03',
         path: '/play/play03',
         component: './Play/Play03',
       },
       {
-        name: 'play.play04',
+        name: 'play04',
         path: '/play/play04',
         component: './Play/Play04',
       },
       {
-        name: 'play.play05',
+        name: 'play05',
         path: '/play/play05',
         component: './Play/Play05',
       },
       {
-        name: 'play.play06',
+        name: 'play06',
         path: '/play/play06',
         component: './Play/Play06',
       },
       {
-        name: 'play.play07',
+        name: 'play07',
         path: '/play/play07',
         component: './Play/Play07',
       },
       {
-        name: 'play.play08',
+        name: 'play08',
         path: '/play/play08',
         component: './Play/Play08',
       },
       {
-        name: 'play.play09',
+        name: 'play09',
         path: '/play/play09',
         component: './Play/Play09',
       },
       {
-        name: 'play.play10',
+        name: 'play10',
         path: '/play/play10',
         component: './Play/Play10',
       },
       {
-        name: 'play.play11',
+        name: 'play11',
         path: '/play/play11',
         component: './Play/Play11',
       },
       {
-        name: 'play.play12',
+        name: 'play12',
         path: '/play/play12',
         component: './Play/Play12',
       },
       {
-        name: 'play.play13',
+        name: 'play13',
         path: '/play/play13',
         component: './Play/Play13',
       },
       {
-        name: 'play.play14',
+        name: 'play14',
         path: '/play/play14',
         component: './Play/Play14',
       },
       {
-        name: 'play.play15',
+        name: 'play15',
         path: '/play/play15',
         component: './Play/Play15',
       },
